@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+# Remove unnecessary directories/files (could be improved)
+#rm -Rf /usr/share/pgrouting/workshop/web/Ext-3.2.1/docs
+#rm -Rf /usr/share/pgrouting/workshop/web/OpenLayers-2.9.1/doc
+
+#DEBHELPER#
+
+exit 0

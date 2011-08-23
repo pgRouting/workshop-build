@@ -1,0 +1,64 @@
+pgrouting+workshop (0.6.1-1) natty; urgency=medium
+
+  * modified map extent
+  * error handling for template database script
+  * minor fixes
+
+ -- Daniel Kastl <daniel@georepublic.de>  Wed, 24 Aug 2011 02:24:38 +0900
+
+pgrouting+workshop (0.6.0-2) natty; urgency=medium
+
+  * added bin directory
+
+ -- Daniel Kastl <daniel@georepublic.de>  Tue, 16 Aug 2011 22:13:06 +0900
+
+pgrouting+workshop (0.6.0-1) natty; urgency=medium
+
+  * Commented postinstall directory removals
+  * Upgraded to 2011 FOSS4G workshop
+
+ -- Daniel Kastl <daniel@georepublic.de>  Tue, 16 Aug 2011 20:35:00 +0900
+
+pgrouting+workshop (0.5.1-3) lucid; urgency=low
+
+  * Updated to latest upstream release
+
+ -- Daniel Kastl <daniel@georepublic.de>  Sat, 18 Sep 2010 10:47:38 +0200
+
+pgrouting+workshop (0.5.1-2) lucid; urgency=low
+
+  * Fixed README file reference
+
+ -- Daniel Kastl <daniel@georepublic.de>  Fri, 06 Aug 2010 06:48:35 +0900
+
+pgrouting+workshop (0.5.1-1) lucid; urgency=low
+
+  * Updated to latest upstream release
+
+ -- Daniel Kastl <daniel@georepublic.de>  Fri, 06 Aug 2010 02:34:09 +0900
+
+pgrouting+workshop (0.4-1) lucid; urgency=low
+
+  * Updated to latest upstream release
+
+ -- Daniel Kastl <daniel@georepublic.de>  Thu, 29 Jul 2010 08:53:52 +0900
+
+pgrouting+workshop (0.3-1) lucid; urgency=low
+
+  * Updated to latest upstream release
+  * HTML and PDF install directive
+  * Adjust install paths
+
+ -- Daniel Kastl <daniel@georepublic.de>  Tue, 27 Jul 2010 12:20:51 +0900
+
+pgrouting+workshop (0.2-1) lucid; urgency=low
+
+  * Updated to latest release
+
+ -- Daniel Kastl <daniel@georepublic.de>  Tue, 06 Jul 2010 11:09:36 +0900
+
+pgrouting+workshop (0.1-1) lucid; urgency=low
+
+  * Initial release
+
+ -- Daniel Kastl <daniel@georepublic.de>  Tue, 06 Jul 2010 05:57:17 +0900
