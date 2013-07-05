@@ -1,3 +1,9 @@
+pgrouting+workshop (2.0.0-alpha-ppa1) quantal; urgency=medium
+
+  * Imported Upstream version 2.0.0-alpha
+
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Mon, 24 Jun 2013 16:56:52 +0900
+
 pgrouting+workshop (0.6.1-1) natty; urgency=medium
 
   * modified map extent
