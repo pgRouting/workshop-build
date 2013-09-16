@@ -31,7 +31,7 @@ This chapter will explain selected pgRouting algorithms and which attributes are
 Shortest Path Dijkstra
 -------------------------------------------------------------------------------
 
-Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``source`` and ``target`` ID, ``id`` attribute and ``cost``. It can distinguish between directed and undirected graphs. You can specify if your network has ``reverse cost`` or not.
+Dijkstra algorithm was the first algorithm implemented in pgRouting. It doesn't require other attributes than ``source`` and ``target`` ID, ``id`` attribute and ``cost``. It can distinguish between `directed <http://en.wikipedia.org/wiki/Directed_graph>`_ and undirected graphs. You can specify if your network has ``reverse cost`` or not.
 
 .. rubric:: Prerequisites
 
@@ -79,7 +79,15 @@ Returns set of ``pgr_costResult``:
 :cost:  cost to traverse from ``id1`` using ``id2``
 
 
+.. note::
+
+	* Many pgRouting functions have ``sql::text`` as one of their arguments. While this may look confusing at first, it makes the functions very flexible as the user can pass any ``SELECT`` statement as function argument as long as the returned result contains the required number of attributes and the correct attribute names. 
+	* Dijkstra algorithm does not require the network geometry.
+	* The function does not return a geometry, but only an ordered list of nodes.
+
 .. rubric:: Example query
+
+``pgr_costResult`` is a common result type used by several pgRouting functions. In the case of ``pgr_dijkstra`` the first column is a sequential ID, followed by node ID, edge ID and cost to pass this edge.
 
 .. code-block:: sql
 
@@ -89,7 +97,7 @@ Returns set of ``pgr_costResult``:
 				 target::integer, 
 				 length::double precision AS cost 
 				FROM ways', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 
 
 .. rubric:: Query result
@@ -98,22 +106,26 @@ Returns set of ``pgr_costResult``:
 
 	 seq | node | edge |        cost         
 	-----+------+------+---------------------
-	   0 |   10 | 3163 |   0.427103399132954
-	   1 | 1084 | 2098 |   0.441091435851107
-	   2 |   35 |   27 |     0.1005403350897
-	   3 |   34 | 1984 |   0.278250260547731
-	...   
-	  40 |   59 |   56 |  0.0452819891352444
-	  41 |   60 |   -1 |                   0
-	(42 rows)
+	   0 |   30 |   53 |  0.0591267653820616
+	   1 |   44 |   52 |  0.0665408320949312
+	   2 |   14 |   15 |  0.0809556879332114
+	   ...
+	   6 |   10 | 6869 |  0.0164274192597773
+	   7 |   59 |   72 |  0.0109385169537801
+	   8 |   60 |   -1 |                   0
+	(9 rows)
 
+.. note::
+	
+	* With more complex SQL statements, using JOINs for example, the result may be in a wrong order. In that case ``ORDER BY seq`` will ensure that the path is in the right order again.
+	* The returned cost attribute represents the cost specified in the ``sql::text`` argument. In this example cost is ``length`` in unit "kilometers". Cost may be time, distance or any combination of both or any other attributes or a custom formula.
 
 .. _astar:
 
 Shortest Path A*
 -------------------------------------------------------------------------------
 
-A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the shortest path search to prefer links which are closer to the target of the search.
+A-Star algorithm is another well-known routing algorithm. It adds geographical information to source and target of each network link. This enables the routing query to prefer links which are closer to the target of the shortest path search.
 
 .. rubric:: Prerequisites
 
@@ -125,18 +137,20 @@ For A-Star you need to prepare your network table and add latitute/longitude col
 	ALTER TABLE ways ADD COLUMN y1 double precision;
 	ALTER TABLE ways ADD COLUMN x2 double precision;
 	ALTER TABLE ways ADD COLUMN y2 double precision;
-	
-	UPDATE ways SET x1 = ST_x(ST_startpoint(the_geom));
-	UPDATE ways SET y1 = ST_y(ST_startpoint(the_geom));
-	
-	UPDATE ways SET x2 = ST_x(ST_endpoint(the_geom));
-	UPDATE ways SET y2 = ST_y(ST_endpoint(the_geom));
-	
+
 	UPDATE ways SET x1 = ST_x(ST_PointN(the_geom, 1));
 	UPDATE ways SET y1 = ST_y(ST_PointN(the_geom, 1));
 	
 	UPDATE ways SET x2 = ST_x(ST_PointN(the_geom, ST_NumPoints(the_geom)));
 	UPDATE ways SET y2 = ST_y(ST_PointN(the_geom, ST_NumPoints(the_geom)));
+
+.. Note::
+
+	* A bug in a previous version of PostGIS didn't allow the use of ``ST_startpoint`` or ``ST_endpoint``.
+	* From PostGIS 2.x ``ST_startpoint`` and ``ST_endpoint`` are only valid for ``LINESTRING`` geometry type and will fail with ``MULTILINESTING``.
+
+	Therefor a slightly more difficult looking query is used.
+	If the network data really contains multi-geomtery linestrings the query might give the wrong start and end point. But in general data has been imported as ``MULTILINESTING`` even if it only contains ``LINESTRING`` geometries.
 
 
 .. rubric:: Description
@@ -193,7 +207,7 @@ Returns set of ``pgr_costResult``:
 				 length::double precision AS cost, 
 				 x1, y1, x2, y2
 				FROM ways', 
-			10, 60, false, false); 
+			30, 60, false, false); 
 		
 
 .. rubric:: Query result
@@ -202,14 +216,19 @@ Returns set of ``pgr_costResult``:
 		
 	 seq | node | edge |        cost         
 	-----+------+------+---------------------
-	   0 |   10 | 3163 |   0.427103399132954
-	   1 | 1084 | 2098 |   0.441091435851107
-	   2 |   35 |   27 |     0.1005403350897
-	   3 |   34 | 1984 |   0.278250260547731
-	...
-	  40 |   59 |   56 |  0.0452819891352444
-	  41 |   60 |   -1 |                   0
-	(42 rows)
+	   0 |   30 |   53 |  0.0591267653820616
+	   1 |   44 |   52 |  0.0665408320949312
+	   2 |   14 |   15 |  0.0809556879332114
+	   ...
+	   6 |   10 | 6869 |  0.0164274192597773
+	   7 |   59 |   72 |  0.0109385169537801
+	   8 |   60 |   -1 |                   0
+	(9 rows)
+
+.. note::
+
+	* The result of Dijkstra and A-Star are the same, which should be the case.
+	* A-Star is supposed to be faster than Dijkstra algorithm as the network size is getting larger. But in case of pgRouting the algorithm speed advantage does not matter really compared the time required to select the network data and build the graph. 
 
 
 .. _kdijkstra:
@@ -226,7 +245,8 @@ kDijkstra doesn't require additional attributes to Dijkstra algorithm.
 
 .. rubric:: Description
 
-If the main goal is to calculate the total cost, for example to calculate multiple routes for a distance matrix, then ``pgr_kdijkstraCost`` returns a more compact result. In case the paths are important ``pgr_kdijkstraPath`` function returns a result similar to A* or Dijkstra for each destination.
+If the main goal is to calculate the total cost, for example to calculate multiple routes for a distance matrix, then ``pgr_kdijkstraCost`` returns a more compact result. 
+In case the paths are important ``pgr_kdijkstraPath`` function returns a result similar to A* or Dijkstra for each destination.
 
 Both functions return a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that summarize the path cost or return the paths.
 
@@ -332,85 +352,5 @@ Both functions return a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, th
 	(149 rows)
 
 
-.. _ksp:
-
-Alternative Routes with K-Shortest-Path
--------------------------------------------------------------------------------
-
-The "K" shortest paths algorithm returns alternative routes. The algorithm not only finds the shortest path, but also "K" other paths in order of increasing cost. "K" is the number of shortest paths to find.
-
-
-.. rubric:: Prerequisites
-
-K-Shortest-Path doesn't require additional attributes to Dijkstra algorithm.
-
-
-.. rubric:: Description
-
-The algorithm returns a set of ``pgr_costResult`` (seq, id1, id2, cost) rows, that make up a path.
-
-.. code-block:: sql
-
-	pgr_costResult[] pgr_ksp(sql text, source integer, target integer, paths integer, has_rcost boolean);
-
-
-.. rubric:: Parameters
-
-:sql: a SQL query, which should return a set of rows with the following columns:
-
-  .. code-block:: sql
-
-    SELECT id, source, target, cost, [,reverse_cost] FROM edge_table
-
-
-  :id: ``int4`` identifier of the edge
-  :source: ``int4`` identifier of the source vertex
-  :target: ``int4`` identifier of the target vertex
-  :cost: ``float8`` value, of the edge traversal cost. A negative cost will prevent the edge from being inserted in the graph.
-  :reverse_cost: (optional) the cost for the reverse traversal of the edge. This is only used when ``has_rcost`` the parameter is ``true`` (see the above remark about negative costs).
-
-:source: ``int4`` id of the start point
-:target: ``int4`` id of the end point
-:paths: ``int4`` number of alternative routes
-:has_rcost: if ``true``, the ``reverse_cost`` column of the SQL generated set of rows will be used for the cost of the traversal of the edge in the opposite direction.
-
-Returns set of ``pgr_costResult``:
-
-:seq:   route ID
-:id1:   node ID
-:id2:   edge ID (``0`` for the last row)
-:cost:  cost to traverse from ``id1`` using ``id2``
-
-
-.. rubric:: Example query
-
-.. code-block:: sql
-
-	SELECT seq AS route, id1 AS node, id2 AS edge, cost FROM pgr_ksp('
-			SELECT gid AS id, 
-				 source::integer, 
-				 target::integer, 
-				 length::double precision AS cost
-				FROM ways', 
-			10, 60, 2, true); 
-
-
-.. rubric:: Query result
-
-.. code-block:: sql
-		
-	 route | node | edge |        cost         
-	-------+------+------+---------------------
-	     0 |   10 | 3163 |   0.427103400230408
-	     0 | 1084 | 2098 |   0.441091448068619
-	     0 |   35 |   27 |   0.100540332496166
-	...
-	     0 |   59 |   79 |  0.0452819876372814
-	     0 |   60 |    0 |                   0
-	     1 |   10 | 3163 |   0.427103400230408
-	     1 | 1084 | 2098 |   0.441091448068619
-	...
-	     1 |   59 |   79 |  0.0452819876372814
-	     1 |   60 |    0 |                   0
-	(86 rows)
+There are many other functions available with the new pgRouting 2.0 release, but most of them work in a similar way, and it would take too much time to mention them all in this workshop. For the complete list of pgRouting functions see the API documentation: http://docs.pgrouting.org/
 

@@ -12,7 +12,7 @@
 osm2pgrouting Import Tool
 ===============================================================================
 
-**osm2pgrouting** is a command line tool that makes it very easy to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
+**osm2pgrouting** is a command line tool that allows to import OpenStreetMap data into a pgRouting database. It builds the routing network topology automatically and creates tables for feature types and road classes. osm2pgrouting was primarily written by Daniel Wendt and is currently hosted on the pgRouting project site: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
 
 .. note::
 
@@ -48,9 +48,13 @@ If you have installed the template databases as described in the previous chapte
 
 .. code-block:: bash
 
-	createdb -U postgres routing
-  psql -U postgres -d routing -c "CREATE EXTENSION postgis;"
-  psql -U postgres -d routing -c "CREATE EXTENSION pgrouting;"
+  # Optional: Drop database
+  dropdb -U postgres pgrouting-workshop
+
+  # Create a new routing database
+  createdb -U postgres pgrouting-workshop
+  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION postgis;"
+  psql -U postgres -d pgrouting-workshop -c "CREATE EXTENSION pgrouting;"
 
 ... and you're done.
 
@@ -58,23 +62,20 @@ Alternativly you can use **PgAdmin III** and SQL commands. Start PgAdmin III (av
 
 .. code-block:: sql
 
-  -- create routing database
-  CREATE DATABASE "routing";
-  \c routing
+  -- create pgrouting-workshop database
+  CREATE DATABASE "pgrouting-workshop";
+  \c pgrouting-workshop
 
   CREATE EXTENSION postgis;
   CREATE EXTENSION pgrouting;
 
 
-See :ref:`previous chapter <installation_load_functions>` for more details.
-
-	
 Run osm2pgrouting
 -------------------------------------------------------------------------------
 
 The next step is to run ``osm2pgrouting`` converter, which is a command line tool, so you need to open a terminal window.
 
-We take the default ``mapconfig.xml`` configuration file and the ``routing`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from downtown Denver to speed up  data processing time.
+We take the default ``mapconfig.xml`` configuration file and the ``pgrouting-workshop`` database we created before. Furthermore we take ``~/Desktop/pgrouting-workshop/data/sampledata.osm`` as raw data. This file contains only OSM data from Nottingham to speed up data processing time.
 
 The workshop data is available as compressed file, which needs to be extracted first either using file manager or with this command:
 
@@ -89,7 +90,7 @@ Then run the converter:
 
 	osm2pgrouting -file "data/sampledata.osm" \
 				  -conf "/usr/share/osm2pgrouting/mapconfig.xml" \
-				  -dbname routing \
+				  -dbname pgrouting-workshop \
 				  -user postgres \
 				  -clean
 					
@@ -145,7 +146,14 @@ List of all possible parameters:
 
 .. note::
 
-	If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
+  * There might be an updated version of osm2pgrouting available. To update the package run:
+
+  .. code-block:: bash
+
+    sudo apt-get update
+    sudo apt-get install --only-upgrade osm2pgrouting
+
+  * If you get permission denied error for postgres users you can set connection method to ``trust`` in ``/etc/postgresql/9.1/main/pg_hba.conf`` and restart PostgreSQL server with ``sudo service postgresql restart``.
 
 
 Depending on the size of your network the calculation and import may take a while. After it's finished connect to your database and check the tables that should have been created:
@@ -175,3 +183,6 @@ If everything went well the result should look like this:
    public | ways                | table    | postgres
   (14 rows)
 
+.. note::
+
+  osm2pgrouting creates more tables and imports more attributes than we will use in this workshop. Some of them have been just added recently and are still lacking proper documentation.
