@@ -1,8 +1,9 @@
 pgrouting+workshop (2.0.1-ppa2) raring; urgency=medium
 
   * Imported Upstream version 2.0.1 again with some fixes
+  * build with updated tarball
 
- -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Tue, 17 Sep 2013 04:49:54 +0900
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Tue, 17 Sep 2013 05:01:02 +0900
 
 pgrouting+workshop (2.0.1-ppa1) raring; urgency=medium
 
