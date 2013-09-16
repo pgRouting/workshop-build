@@ -1,3 +1,13 @@
+pgrouting+workshop (2.0.1-ppa1) raring; urgency=medium
+
+  * Updated fixed version
+  * fixed small error
+  * Fixed name in changelog
+  * removed messy commits
+  * Imported Upstream version 2.0.1
+
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Tue, 17 Sep 2013 01:13:20 +0900
+
 pgrouting+workshop (2.0.0-ppa2) raring; urgency=medium
 
   * Fixed wrong Readme name
