@@ -223,7 +223,7 @@ What the function does internally:
 	                                        || quote_ident(tbl) || ''', '
 	                                        || source || ', ' || target 
 	                                        || ' , false, false), '
-	                                || quote_ident(tbl) || ' WHERE id2 = gid ';
+	                                || quote_ident(tbl) || ' WHERE id2 = gid ORDER BY seq';
 
 		-- Remember start point
 	        point := source;
@@ -282,4 +282,4 @@ We can now install this function into the database:
 
 .. code-block:: bash
 
-        psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
+	psql -U postgres -d pgrouting-workshop ~/Desktop/pgrouting-workshop/data/fromAtoB.sql
