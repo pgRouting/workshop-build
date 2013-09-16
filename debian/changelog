@@ -1,15 +1,3 @@
-pgrouting+workshop (2.0.0-ppa4) raring; urgency=medium
-
-  * Imported Upstream version 2.0.0 (more fixes)
-
- -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Tue, 17 Sep 2013 01:00:37 +0900
-
-pgrouting+workshop (2.0.0-ppa3) raring; urgency=medium
-
-  * Imported Upstream version 2.0.0 (including fixes)
-
- -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Tue, 17 Sep 2013 00:29:36 +0900
-
 pgrouting+workshop (2.0.0-ppa2) raring; urgency=medium
 
   * Fixed wrong Readme name
