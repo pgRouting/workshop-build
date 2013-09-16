@@ -3,5 +3,3 @@ web                							usr/share/pgrouting/workshop
 data.tar.gz									usr/share/pgrouting/workshop
 docs/_build/html							usr/share/pgrouting/workshop/docs
 docs/_build/latex/pgRoutingWorkshop.pdf		usr/share/pgrouting/workshop/docs
-
-

@@ -4,12 +4,12 @@ Priority: extra
 Maintainer: Daniel Kastl <daniel@georepublic.de>
 Build-Depends: debhelper (>= 7), python-sphinx, texlive-latex-base, texlive-latex-extra, texlive-latex-recommended, texlive-fonts-extra, texlive-fonts-recommended
 Standards-Version: 3.8.4
-Homepage: http://www.pgrouting.org
+Homepage: http://workshop.pgrouting.org
 
 Package: pgrouting-workshop
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: pgRouting Workshop
- “FOSS4G routing with pgRouting tools, OpenStreetMap road data and GeoExt”, 
- primarly written for the FOSS4G2010 Workshop (W-10).
+ “FOSS4G routing with pgRouting, OpenStreetMap road data and OpenLayers 3”, 
+ primarly written for the FOSS4G2013 Workshop.
 

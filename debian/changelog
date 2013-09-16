@@ -1,3 +1,10 @@
+pgrouting+workshop (2.0.0-ppa1) raring; urgency=medium
+
+  * Prepared for FOSS4G 2013 workshop
+  * Imported Upstream version 2.0.0
+
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Mon, 16 Sep 2013 22:52:59 +0900
+
 pgrouting+workshop (2.0.0-alpha-ppa1) quantal; urgency=medium
 
   * Imported Upstream version 2.0.0-alpha
