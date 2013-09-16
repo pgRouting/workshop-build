@@ -42,13 +42,11 @@ pgRouting provides functions for:
 
 Advantages of the database routing approach are:
 
-* Accessible by multiple clients through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.
-* Uses PostGIS for its geographic data format, which in turn uses OGC's data format Well Konwn Text (WKT) and Well Known Binary (WKB). 
-* Open Source software like qGIS and uDig can modify the data/attributes,
+* Data and attributes can be modified by many clients, like `Quantum GIS" <http://live.osgeo.org/en/overview/qgis_overview.html>`_ and `uDig <http://live.osgeo.org/en/overview/udig_overview.html>`_ through JDBC, ODBC, or directly using Pl/pgSQL. The clients can either be PCs or mobile devices.
 * Data changes can be reflected instantaneously through the routing engine. There is no need for precalculation.
 * The "cost" parameter can be dynamically calculated through SQL and its value can come from multiple fields or tables.
 
-pgRouting is available under the GPLv2 license.
+pgRouting is available under the GPLv2 license and is supported by a growing community of individuals, businesses and organizations.
 
 pgRouting website: http://www.pgrouting.org
 
@@ -89,13 +87,10 @@ Project website: http://www.pgrouting.org/docs/tools/osm2pgrouting.html
 OpenLayers 3
 -------------------------------------------------------------------------------
 
-..
-	GeoExt is a "JavaScript Toolkit for Rich Web Mapping Applications". GeoExt brings together the geospatial know how of `OpenLayers <http://www.openlayers.org>`_ with the user interface savvy of `Ext JS <http://www.sencha.com>`_ to help you build powerful desktop style GIS apps on the web with JavaScript.
+OpenLayers 3 brings geospatial data to any modern desktop or mobile web browser. 
+ol3 is a complete rewrite, featuring WebGL and 3D. Like `OpenLayers 2 <http://openlayers.org/>`_, it supports a huge variety of data formats and layer types.
+But unlike OpenLayers 2, it is built from scratch relying on latest browser technologies like HTML5, WebGL and CSS3.
 
-	.. image:: images/GeoExt.png
-		:align: center
-
-	GeoExt is available under the BSD license and is supported by a growing community of individuals, businesses and organizations.
-
+ol3 is sill a work in progress; all the features of OpenLayers 2 are not yet ported to the new version.
 
 OpenLayers 3 website: http://www.ol3js.org

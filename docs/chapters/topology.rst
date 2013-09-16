@@ -50,7 +50,6 @@ Let's see wich tables have been created:
 	               List of relations
 	 Schema |       Name        | Type  |  Owner   
 	--------+-------------------+-------+----------
-	 public | classes           | table | postgres
 	 public | geography_columns | view  | postgres
 	 public | geometry_columns  | view  | postgres
 	 public | raster_columns    | view  | postgres
@@ -110,7 +109,7 @@ If your network data doesn't have such network topology information already you 
 
 	pgr_createTopology('<table>', float tolerance, '<geometry column', '<gid>')
 	
-First we have to add source and target column, then we run the assign_vertex_id function ... and wait.:
+First we have to add source and target column, then we run the ``pgr_createTopology`` function ... and wait. Depending on the network size this process may take from minutes to hours. It will also require enough memory (RAM or SWAP partition) to store temporary data. 
 
 .. code-block:: sql
 
@@ -140,7 +139,7 @@ Fortunately we didn't need to wait too long because the data is small. But your 
 	CREATE INDEX source_idx ON ways("source");
 	CREATE INDEX target_idx ON ways("target");
 
-After these steps our routing database look like this:
+After these steps our routing database looks like this:
 
 .. rubric:: Run: ``\d``
 	
@@ -149,7 +148,6 @@ After these steps our routing database look like this:
 	                 List of relations
 	 Schema |        Name         |   Type   |  Owner   
 	--------+---------------------+----------+----------
-	 public | classes             | table    | postgres
 	 public | geography_columns   | view     | postgres
 	 public | geometry_columns    | view     | postgres
 	 public | raster_columns      | view     | postgres
@@ -160,6 +158,9 @@ After these steps our routing database look like this:
 	 public | ways                | table    | postgres
 	(9 rows)
 
+* ``geography_columns`` should contain a record for each table with "geometry" attribute and its SRID.
+* ``vertices_tmp`` contains a list of all network nodes.
+
 
 .. rubric:: Run: ``\d ways``
 	
@@ -168,10 +169,10 @@ After these steps our routing database look like this:
 	               Table "public.ways"
 	  Column  |           Type            | Modifiers 
 	----------+---------------------------+-----------
-	 gid      | bigint                    | 
+	 gid      | integer                   | 
 	 class_id | integer                   | not null
 	 length   | double precision          | 
-	 name     | character(200)            | 
+	 name     | text                      | 
 	 osm_id   | bigint                    | 
 	 the_geom | geometry(LineString,4326) | 
 	 source   | integer                   | 
@@ -182,5 +183,8 @@ After these steps our routing database look like this:
 	    "source_idx" btree (source)
 	    "target_idx" btree (target)
 
+* ``source`` and ``target`` columns are now updated with node IDs.
+* ``name`` may contain the street name or be empty.
+* ``length`` is the road link length in kilometers.
 		
 Now we are ready for our first routing query with :doc:`Dijkstra algorithm <shortest_path>`!

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ol3 pgRouting client</title>
+    <meta charset="utf-8">
+    <link href="ol3/ol.css" rel="stylesheet">
+    <style>
+      #ol-map {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+    <script src="ol3/ol.js"></script>
+  </head>
+  <body>
+    <div id="ol-map">
+      <div id="start-point">start</div>
+      <div id="final-point">final</div>
+    </div>
+
+    <button id="clear">clear</button>
+
+    <script type="text/javascript">
+
+      var map = new ol.Map({
+        target: 'ol-map',
+        renderer: ol.RendererHint.CANVAS,
+        layers: [
+          new ol.layer.TileLayer({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View2D({
+          center: [-127998, 6974591],
+          zoom: 10
+        })
+      });
+
+      var params = {
+        LAYERS: 'pgrouting:pgrouting',
+        FORMAT: 'image/png'
+      };
+
+      var startPoint = new ol.Overlay({
+        map: map,
+        element: document.getElementById('start-point')
+      });
+      var finalPoint = new ol.Overlay({
+        map: map,
+        element: document.getElementById('final-point')
+      });
+
+      var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+
+      map.on('click', function(event) {
+        var coordinate = event.getCoordinate();
+        if (startPoint.getPosition() == undefined) {
+          // first click
+          startPoint.setPosition(coordinate);
+        } else if (finalPoint.getPosition() == undefined) {
+          // second click
+          finalPoint.setPosition(coordinate);
+
+          // transform the coordinates from the map projection (EPSG:3857)
+          // into the server projection (EPSG:4326)
+          var startCoord = transform(startPoint.getPosition());
+          var finalCoord = transform(finalPoint.getPosition());
+          var viewparams = [
+            'x1:' + startCoord[0], 'y1:' + startCoord[1],
+            'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+          ];
+          params.viewparams = viewparams.join(';');
+
+          // we now have the two points, create the result layer and add it to the map
+          result = new ol.layer.ImageLayer({
+            source: new ol.source.SingleImageWMS({
+              url: 'http://localhost:8082/geoserver/pgrouting/wms',
+              params: params
+            })
+          });
+          map.addLayer(result);
+        }
+      });
+
+      document.getElementById('clear').addEventListener('click', function(event) {
+        // hide the overlays
+        startPoint.setPosition(undefined);
+        finalPoint.setPosition(undefined);
+
+        // remove the result layer
+        map.removeLayer(result);
+      });
+
+    </script>
+  </body>
+</html>
