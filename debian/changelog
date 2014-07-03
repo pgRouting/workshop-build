@@ -1,3 +1,9 @@
+pgrouting+workshop (2.0.4-ppa1) trusty; urgency=medium
+
+  * Imported Upstream version 2.0.4
+
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Thu, 03 Jul 2014 03:54:50 +0200
+
 pgrouting+workshop (2.0.3-ppa1) trusty; urgency=medium
 
   * Imported Upstream version 2.0.3
