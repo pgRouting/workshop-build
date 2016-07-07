@@ -1,3 +1,10 @@
+pgrouting+workshop (2.1.0-beta-ppa1) xenial; urgency=medium
+
+  * upgraded buildpackage config
+  * Imported Upstream version from develop/hokkaido
+
+ -- Daniel Kastl (Georepublic) <daniel@georepublic.de>  Fri, 08 Jul 2016 01:53:57 +0900
+
 pgrouting+workshop (2.0.6-ppa1) trusty; urgency=medium
 
   * Imported Upstream version 2.0.6
